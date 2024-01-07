@@ -1,0 +1,15 @@
+<!doctype html>
+<html>
+<head>
+    <title>Movie List</title>
+    <!-- Add any required CSS or JS here -->
+</head>
+<body>
+    <h1>Movies</h1>
+    <ul>
+        {% for movie in movies %}
+            <li>{{ movie.name }} - {{ movie.description }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

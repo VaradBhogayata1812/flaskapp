@@ -1,27 +1,24 @@
-from datetime import *
-import time
-import sys
-
+import os
 import json
 import requests
-# First we set our credentials
+from flask import Flask, request, render_template
 
-from flask import Flask, request, session, g, redirect, url_for, abort, \
-     render_template, flash
 app = Flask(__name__)
 app.debug = True
 
+api_key = os.getenv('API_KEY')
+
 def fetch_movies_from_api():
-    api_url = "https://api.themoviedb.org/3/movie/popular?api_key=899e7f953bbd925e4e246d3a54c3e65f"  # Replace with your actual TMDb API key
+    api_url = f"https://api.themoviedb.org/3/movie/popular?api_key={api_key}"
     response = requests.get(api_url)
     if response.status_code == 200:
-        return response.json()['results']  # Adjust according to the structure of the response
+        return response.json()['results']
     else:
         print("Failed to fetch movies")
         return []
 
 @app.route('/')
-def cat_page():
+def home_page():
     movies = fetch_movies_from_api()
     return render_template('movies_list.html', movies=movies)
 
@@ -54,23 +51,15 @@ def video_page(video):
                       pic=index[key][key2]
     return render_template('video.html', name=video,file=videofile,pic=pic)
 
-@app.route('/')
-def cat_page():
+@app.route('/videos')
+def videos_page():
     url = "http://34.88.51.222/myflix/videos"
-    headers = {}
-    payload = json.dumps({ })
-
     response = requests.get(url)
-    #print (response)
-    # exit if status code is not ok
-    print (response)
-    print (response.status_code)
     if response.status_code != 200:
-      print("Unexpected response: {0}. Status: {1}. Message: {2}".format(response.reason, response.status, jResp['Exception']['Message']))
-      return "Unexpected response: {0}. Status: {1}. Message: {2}".format(response.reason, response.status, jResp['Exception']['Message'])
+        print(f"Unexpected response: {response.reason}. Status: {response.status}")
+        return f"Unexpected response: {response.reason}. Status: {response.status}"
     jResp = response.json()
-    print (type(jResp))
-    html="<h2> Your Videos</h2>"
+    html = "<h2>Your Videos</h2>"
     for index in jResp:
        #print (json.dumps(index))
        print ("----------------")
@@ -95,6 +84,5 @@ def cat_page():
 
     return html
 
-
 if __name__ == '__main__':
-    app.run(host='0.0.0.0',port="80")
+    app.run(host='0.0.0.0', port=80)

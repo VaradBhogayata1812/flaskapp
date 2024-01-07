@@ -11,10 +11,24 @@ from flask import Flask, request, session, g, redirect, url_for, abort, \
 app = Flask(__name__)
 app.debug = True
 
+def fetch_movies_from_api():
+    api_url = "https://api.themoviedb.org/3/movie/popular?api_key=899e7f953bbd925e4e246d3a54c3e65f"  # Replace with your actual TMDb API key
+    response = requests.get(api_url)
+    if response.status_code == 200:
+        return response.json()['results']  # Adjust according to the structure of the response
+    else:
+        print("Failed to fetch movies")
+        return []
+
+@app.route('/')
+def cat_page():
+    movies = fetch_movies_from_api()
+    return render_template('movies_list.html', movies=movies)
+
 @app.route('/Video/<video>')
 def video_page(video):
     print (video)
-    url = 'http://34.173.227.154/myflix/videos?filter={"video.uuid":"'+video+'"}'
+    url = 'http://34.88.51.222/myflix/videos?filter={"video.uuid":"'+video+'"}'
     headers = {}
     payload = json.dumps({ })
     print (request.endpoint)
@@ -42,7 +56,7 @@ def video_page(video):
 
 @app.route('/')
 def cat_page():
-    url = "http://34.173.227.154/myflix/videos"
+    url = "http://34.88.51.222/myflix/videos"
     headers = {}
     payload = json.dumps({ })
 
@@ -75,7 +89,7 @@ def cat_page():
               html=html+'<h3>'+name+'</h3>'
               ServerIP=request.host.split(':')[0]
               html=html+'<a href="http://'+ServerIP+'/Video/'+uuid+'">'
-              html=html+'<img src="http://35.228.145.155/pics/'+thumb+'">'
+            #   html=html+'<img src="http://34.88.51.222/pics/'+thumb+'">'
               html=html+"</a>"        
               print("=======================")
 

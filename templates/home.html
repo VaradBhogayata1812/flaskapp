@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>MyFlix</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Welcome to MyFlix</h1>
+    <a href="/login">Login</a>
+    <a href="/register">Register</a>
+
+    <div class="featured-movies">
+        <h2>Featured Movies</h2>
+        <!-- Loop through featured movies and display them -->
+        {% for movie in featured_movies %}
+            <div class="movie">
+                <img src="https://image.tmdb.org/t/p/w500{{ movie.poster_path }}" alt="{{ movie.title }}">
+                <h3>{{ movie.title }}</h3>
+            </div>
+        {% endfor %}
+    </div>
+</body>
+</html>

@@ -37,3 +37,20 @@ h1 {
     line-height: 1.4;
     margin: 0;
 }
+.movie {
+    margin: 10px;
+    text-align: center;
+}
+
+.movie img {
+    width: 100%;
+    max-width: 200px; /* Adjust as needed */
+    height: auto;
+    border-radius: 10px; /* Optional, for rounded corners */
+}
+
+.movie h3 {
+    margin-top: 5px;
+    font-size: 1em;
+}
+

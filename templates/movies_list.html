@@ -7,10 +7,16 @@
 <body>
     <header>
         <h1>MyFlix Movies</h1>
-        <nav>
-            <a href="/login">Login</a> | <a href="/register">Register</a>
-        </nav>
     </header>
+    <!-- Featured Movie Section -->
+    <div class="featured-movie">
+        <img src="http://image.tmdb.org/t/p/original{{ featured_movie.poster_path }}" alt="{{ featured_movie.original_title }}" class="featured-movie-image">
+        <div class="featured-movie-info">
+            <h2 class="featured-movie-title">{{ featured_movie.original_title }}</h2>
+            <p class="featured-movie-overview">{{ featured_movie.overview }}</p>
+            <!-- Additional controls like play button or add to list could be added here -->
+        </div>
+    </div>
     <div class="movie-list">
         {% for movie in movies %}
         <div class="movie">

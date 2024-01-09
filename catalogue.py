@@ -33,11 +33,17 @@ def fetch_movies_from_api():
     else:
         print("Failed to fetch movies")
         return []
-
-@app.route('/')
-def home_page():
-    movies = fetch_movies_from_api()
-    return render_template('movies_list.html', movies=movies)
+    
+def fetch_featured_movies():
+    # Implement logic to fetch a limited number of movies
+    # For simplicity, let's fetch the first 5 popular movies
+    api_url = f"https://api.themoviedb.org/3/movie/popular?api_key={api_key}&page=1"
+    response = requests.get(api_url)
+    if response.status_code == 200:
+        return response.json()['results'][:5]
+    else:
+        print("Failed to fetch featured movies")
+        return []
 
 # Function to hash a password
 def hash_password(plain_text_password):
@@ -46,6 +52,19 @@ def hash_password(plain_text_password):
 # Function to check a password
 def check_password(hashed_password, plain_text_password):
     return bcrypt.check_password_hash(hashed_password, plain_text_password)
+
+    
+@app.route('/')
+def home_page():
+    # Fetch only a few featured movies for the homepage
+    featured_movies = fetch_featured_movies()
+    return render_template('home.html', featured_movies=featured_movies)
+
+@app.route('/movies')
+def movies_page():
+    # This page shows the full movie list and is accessible after login
+    movies = fetch_movies_from_api()
+    return render_template('movies_list.html', movies=movies)
 
 # Route for user registration
 @app.route('/register', methods=['GET', 'POST'])

@@ -118,7 +118,7 @@ def register():
         cursor.close()
         db_connection.close()
 
-        return jsonify({'status': 'success', 'username': username}), 201
+        return redirect(url_for('login'))
     else:
         return render_template('register.html')
 

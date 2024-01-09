@@ -68,7 +68,11 @@ def home_page():
 def movies_page():
     # This page shows the full movie list and is accessible after login
     movies = fetch_movies_from_api()
-    return render_template('movies_list.html', movies=movies)
+    # Define a featured_movie variable by selecting one from the movies list
+    # This is just an example, adjust the logic to choose the featured movie as needed
+    featured_movie = movies[0] if movies else None
+    return render_template('movies_list.html', movies=movies, featured_movie=featured_movie)
+
 
 # Route for user login
 @app.route('/login', methods=['GET', 'POST'])
@@ -99,6 +103,7 @@ def login():
             return jsonify({'status': 'fail', 'message': 'Invalid credentials'}), 401
     else:
         return render_template('login.html')
+
 
 # Route for user registration
 @app.route('/register', methods=['GET', 'POST'])

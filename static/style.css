@@ -53,3 +53,11 @@ h1 {
     margin-top: 5px;
     font-size: 1em;
 }
+.featured-movie img {
+    width: auto; /* Adjust width automatically */
+    max-width: 600px; /* Maximum width of the image */
+    max-height: 400px; /* Maximum height of the image */
+    height: auto; /* Adjust height automatically */
+    display: block;
+    margin: 0 auto; /* Center in block */
+}

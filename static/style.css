@@ -1,3 +1,4 @@
+/* Overall body styling */
 body {
     font-family: 'Arial', sans-serif;
     background-color: #141414;
@@ -5,52 +6,101 @@ body {
     margin: 0;
     padding: 20px;
 }
+
+/* Header styling */
 h1 {
     color: #E50914;
 }
-.movie-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    padding: 0;
+
+/* Featured Movie Section */
+.featured-movie-section {
+    margin-bottom: 40px;
 }
-.movie {
+
+.featured-movie-container {
+    display: flex;
+    justify-content: center;
+    position: relative;
+    color: #fff;
+}
+
+.featured-movie-poster {
+    width: 100%;
+    max-width: 800px; /* Adjust as needed */
+    border-radius: 4px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.6);
+}
+
+.featured-movie-content {
+    position: absolute;
+    bottom: 4rem;
+    left: 4rem;
+}
+
+/* Other Movies Section */
+.other-movies-section h2 {
+    margin-left: 0;
+    padding-left: 20px;
+}
+
+.movie-grid {
+    display: flex;
+    overflow-x: auto;
+    gap: 20px;
+    padding: 0 20px;
+}
+
+.movie-card {
+    flex: 0 0 auto;
+    width: 200px;
     background-color: #222;
     border-radius: 8px;
     overflow: hidden;
-    width: 200px;
+    margin-bottom: 20px;
 }
-.movie img {
+
+.movie-card img {
     width: 100%;
     height: auto;
     display: block;
 }
+
 .movie-info {
     padding: 10px;
 }
-.movie-title {
-    font-size: 18px;
-    margin: 0 0 10px 0;
-}
-.movie-overview {
-    font-size: 14px;
-    line-height: 1.4;
+
+.movie-info h3 {
     margin: 0;
-}
-.movie {
-    margin: 10px;
-    text-align: center;
+    font-size: 18px;
 }
 
-.movie img {
-    width: 100%;
-    max-width: 200px; /* Adjust as needed */
-    height: auto;
-    border-radius: 10px; /* Optional, for rounded corners */
+.movie-info p {
+    font-size: 14px;
+    margin: 5px 0;
 }
 
-.movie h3 {
-    margin-top: 5px;
-    font-size: 1em;
+/* Horizontal Scrolling for Movie Grid */
+.movie-grid::-webkit-scrollbar {
+    display: none; /* Hide scrollbar for Webkit browsers */
 }
 
+.movie-grid {
+    -ms-overflow-style: none;  /* Hide scrollbar for IE and Edge */
+    scrollbar-width: none;  /* Hide scrollbar for Firefox */
+}
+
+/* Utility classes for text */
+.movie-release-date,
+.movie-genre,
+.movie-rating {
+    color: #999;
+    font-size: 14px;
+}
+
+/* Ensure text doesn't overflow in grid */
+.movie-grid h3,
+.movie-grid p {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

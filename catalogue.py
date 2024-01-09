@@ -8,7 +8,7 @@ import pymysql
 # Configure your database connection here
 db_config = {
     'host': 'myflix-user-database.c6bg2uvvdgty.us-east-1.rds.amazonaws.com',
-    'database': 'myflix-user-database',
+    'database': 'myflixusers',
     'user': 'admin',
     'password': 'Varad#1812'
 }
@@ -47,41 +47,59 @@ def hash_password(plain_text_password):
 def check_password(hashed_password, plain_text_password):
     return bcrypt.check_password_hash(hashed_password, plain_text_password)
 
-# Endpoint for user registration
-@app.route('/register', methods=['POST'])
+# Route for user registration
+@app.route('/register', methods=['GET', 'POST'])
 def register():
-    username = request.form.get('username')
-    plain_text_password = request.form.get('password')
+    if request.method == 'POST':
+        username = request.form.get('username')
+        plain_text_password = request.form.get('password')
 
-    # Hash the password
-    hashed_password = hash_password(plain_text_password)
+        # Create a new database connection
+        db_connection = pymysql.connect(**db_config)
+        cursor = db_connection.cursor()
 
-    # Execute SQL command
-    cursor.execute("INSERT INTO users (username, password_hash) VALUES (%s, %s)",
-                   (username, hashed_password))
-    db_connection.commit()
+        # Hash the password
+        hashed_password = hash_password(plain_text_password)
 
-    return jsonify({'status': 'success', 'username': username}), 201
+        # Execute SQL command
+        cursor.execute("INSERT INTO users (username, password_hash) VALUES (%s, %s)",
+                       (username, hashed_password))
+        db_connection.commit()
 
-# Make sure to close the cursor and the database connection when done
-cursor.close()
-db_connection.close()
+        # Close the cursor and database connection
+        cursor.close()
+        db_connection.close()
 
-# Endpoint for user login
-@app.route('/login', methods=['POST'])
-def login():
-    username = request.form.get('username')
-    plain_text_password = request.form.get('password')
-    
-    # Fetch the user's hashed password from your database
-    cursor.execute("SELECT password_hash FROM users WHERE username = %s", (username,))
-    user_record = cursor.fetchone()
-    
-    # Verify the password
-    if user_record and check_password(user_record['password_hash'], plain_text_password):
-        return jsonify({'status': 'success', 'message': 'Login successful'})
+        return jsonify({'status': 'success', 'username': username}), 201
     else:
-        return jsonify({'status': 'fail', 'message': 'Invalid credentials'}), 401
+        return render_template('register.html')
+
+# Route for user login
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        plain_text_password = request.form.get('password')
+
+        # Create a new database connection
+        db_connection = pymysql.connect(**db_config)
+        cursor = db_connection.cursor()
+
+        # Fetch the user's hashed password from the database
+        cursor.execute("SELECT password_hash FROM users WHERE username = %s", (username,))
+        user_record = cursor.fetchone()
+
+        # Close the cursor and database connection
+        cursor.close()
+        db_connection.close()
+
+        # Verify the password
+        if user_record and check_password(user_record[0], plain_text_password):
+            return jsonify({'status': 'success', 'message': 'Login successful'})
+        else:
+            return jsonify({'status': 'fail', 'message': 'Invalid credentials'}), 401
+    else:
+        return render_template('login.html')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)

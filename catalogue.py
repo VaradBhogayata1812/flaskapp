@@ -27,12 +27,16 @@ api_key = os.getenv('API_KEY')
 
 # Function to hash a password
 def hash_password(plain_text_password):
-    return bcrypt.generate_password_hash(plain_text_password).decode('utf-8')
+    # Generate a salt
+    salt = bcrypt.gensalt()
+    # Hash the password
+    hashed_password = bcrypt.hashpw(plain_text_password.encode('utf-8'), salt)
+    return hashed_password.decode('utf-8')
 
 # Function to check a password
 def check_password(hashed_password, plain_text_password):
-    return bcrypt.check_password_hash(hashed_password, plain_text_password)
-
+    # Check the password
+    return bcrypt.checkpw(plain_text_password.encode('utf-8'), hashed_password.encode('utf-8'))
 def fetch_movies_from_api():
     api_url = f"https://api.themoviedb.org/3/movie/popular?api_key={api_key}"
     response = requests.get(api_url)

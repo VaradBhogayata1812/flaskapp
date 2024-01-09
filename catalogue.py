@@ -87,7 +87,7 @@ def login():
         # Verify the password
         if user_record and check_password(user_record[0], plain_text_password):
             # Redirect to movies page after successful login
-            return redirect(url_for('movies_list'))
+            return redirect(url_for('movies_page'))
         else:
             # Return an error message if login fails
             # Consider rendering a page with an error message instead of JSON response

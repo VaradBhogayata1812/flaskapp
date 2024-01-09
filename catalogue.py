@@ -37,6 +37,7 @@ def hash_password(plain_text_password):
 def check_password(hashed_password, plain_text_password):
     # Check the password
     return bcrypt.checkpw(plain_text_password.encode('utf-8'), hashed_password.encode('utf-8'))
+
 def fetch_movies_from_api():
     api_url = f"https://api.themoviedb.org/3/movie/popular?api_key={api_key}"
     response = requests.get(api_url)
